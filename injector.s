@@ -24,13 +24,8 @@ section '.data' data readable writable
         pid rd 1
         hProc rd 1
         hAsdc rd 1
-        hKernel rd 1
         last_err rd 1
-        load_lib_addr rd 1
         dereercomp rd 1
-
-
-
 
 
 section '.code' code readable executable
@@ -64,17 +59,6 @@ section '.code' code readable executable
 
                         mov [dll_len], eax
 
-                        push str_kernel32
-                        call [GetModuleHandleA]
-
-                        mov [hKernel], eax
-
-                        push str_load_lib
-                        push [hKernel]
-                        call [GetProcAddress]
-
-                        mov [load_lib_addr], eax
-
                         mov [alloc_right], MEM_RESERVE
                         or [alloc_right], MEM_COMMIT
 
@@ -97,7 +81,7 @@ section '.code' code readable executable
                         push 0
                         push 0
                         push [dereercomp]
-                        push [load_lib_addr]
+                        push [LoadLibraryA]
                         push 0
                         push 0
                         push [hProc]
@@ -149,6 +133,7 @@ section '.idata' import data readable
                CloseHandle, 'CloseHandle',\
                GetLastError, 'GetLastError',\
                GetModuleHandleA, 'GetModuleHandleA',\
+               LoadLibraryA, 'LoadLibraryA',\
                GetProcAddress, 'GetProcAddress',\
                VirtualAllocEx, 'VirtualAllocEx',\
                VirtualFreeEx, 'VirtualFreeEx',\
